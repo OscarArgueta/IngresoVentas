@@ -1,6 +1,8 @@
 package com.servicont.ingresoventas;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +18,8 @@ public class FXMLController implements Initializable {
     private Label label;
     @FXML
     private TextField tfFecha;
+    @FXML
+    private TextField tfSerie;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -30,12 +34,25 @@ public class FXMLController implements Initializable {
             tfFecha.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, 
-                String newValue) {
+                                    String newValue) {
                     if (!newValue.matches("\\d*")) {
-                        tfFecha.setText(newValue.replaceAll("[^\\d]", ""));
+                        tfFecha.setText(newValue.replaceAll("[^\\d-]", ""));
+                    }
+                    if (tfFecha.getLength() == 4 && tfFecha.getText().indexOf("-") == -1){
+                        String añoActual = new SimpleDateFormat("yyyy").format(new Date());
+                        tfFecha.setText(newValue.substring(0,2)+"-"+newValue.substring(2,4)+"-"+añoActual);
                     }
                 }
             });
+            
+            tfSerie.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue){
+                    tfSerie.setText(newValue.toUpperCase());
+                }
+            });
+//            tfSerie.setPrefWidth(50);
         }catch(Exception ex){
             ex.printStackTrace();
             System.err.println("ERROR : ["+ex.getMessage()+"]");

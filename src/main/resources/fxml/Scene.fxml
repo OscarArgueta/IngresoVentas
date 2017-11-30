@@ -16,6 +16,8 @@
         <!--<Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />-->
         <Text text="Datos"   GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
         <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="tfFecha"/>
+        <TextField GridPane.columnIndex="0" GridPane.rowIndex="2" fx:id="tfFecha"/>
+        <Label text="Serie:" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="tfSerie" prefWidth="50.0"/>
     </children>
 </GridPane>
