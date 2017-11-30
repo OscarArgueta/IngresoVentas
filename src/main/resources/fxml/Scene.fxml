@@ -5,10 +5,17 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400" prefWidth="320" xmlns:fx="http://javafx.com/fxml" fx:controller="com.servicont.ingresoventas.FXMLController">
+<GridPane fx:controller="com.servicont.ingresoventas.FXMLController"  xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="10" vgap="10">
+    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
+        <!--<Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />-->
+        <!--<Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />-->
+        <Text text="Datos"   GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+        <Label text="Fecha:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="tfFecha"/>
     </children>
-</AnchorPane>
+</GridPane>
