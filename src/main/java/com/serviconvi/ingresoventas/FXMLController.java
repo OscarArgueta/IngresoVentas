@@ -1,5 +1,6 @@
 package com.serviconvi.ingresoventas;
 
+import com.serviconvi.ingresoventas.dao.CatTipoDocumentoDAO;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +31,12 @@ public class FXMLController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
         label.setText("Hello World!");
+    }
+    
+    @FXML
+    private void showSelection(ActionEvent event){
+        CatTipoDocumento catTipoDoc = (CatTipoDocumento) cbTipoDoc.getValue();
+        System.out.println("catTipoDoc.getCodigo() : ["+catTipoDoc.getCodigo()+"]");
     }
     
     @Override
@@ -68,10 +75,9 @@ public class FXMLController implements Initializable {
                 }
             });
 
-            List<String> strings = new ArrayList<>();
-            strings.add("Test1");
-            strings.add("Test2");
-            cbTipoDoc.setItems(FXCollections.observableArrayList(strings));
+            CatTipoDocumentoDAO catTipoDocDAO = new CatTipoDocumentoDAO();
+            List<CatTipoDocumento> tipoDeDocumentos = catTipoDocDAO.obtenerTipoDocumento();
+            cbTipoDoc.setItems(FXCollections.observableArrayList(tipoDeDocumentos));
         }catch(Exception ex){
             ex.printStackTrace();
             System.err.println("ERROR : ["+ex.getMessage()+"]");

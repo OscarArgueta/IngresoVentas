@@ -26,7 +26,7 @@
                   <Label layoutX="227.0" layoutY="35.0" text="Al" />
                   <TextField fx:id="tfAl" layoutX="245.0" layoutY="30.0" prefHeight="25.0" prefWidth="33.0" />
                   <Label layoutX="293.0" layoutY="14.0" text="Tipo Documento" />
-                  <ComboBox fx:id="cbTipoDoc" layoutX="293.0" layoutY="30.0" prefWidth="150.0" />
+                  <ComboBox fx:id="cbTipoDoc" layoutX="293.0" layoutY="30.0" onAction="#showSelection" prefHeight="25.0" prefWidth="177.0" promptText="SELECCIONAR" />
                </children>
             </AnchorPane>
         </content>
