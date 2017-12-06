@@ -1,4 +1,4 @@
-package com.servicont.ingresoventas;
+package com.serviconvi.ingresoventas;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;

@@ -1,4 +1,4 @@
-package com.servicont.ingresoventas;
+package com.serviconvi.ingresoventas;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import com.serviconvi.scentidades.CatTipoDocumento;
 
 public class FXMLController implements Initializable {
     
