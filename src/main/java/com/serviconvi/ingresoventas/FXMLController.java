@@ -17,6 +17,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import com.serviconvi.scentidades.CatTipoDocumento;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FXMLController implements Initializable {
     
@@ -26,17 +28,18 @@ public class FXMLController implements Initializable {
     private TextField tfFecha, tfSerie, tfDe, tfAl;
     @FXML
     private ComboBox cbTipoDoc;
+    static Logger log = LogManager.getLogger(FXMLController.class);
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
+        log.info("You clicked me!");
         label.setText("Hello World!");
     }
     
     @FXML
     private void showSelection(ActionEvent event){
         CatTipoDocumento catTipoDoc = (CatTipoDocumento) cbTipoDoc.getValue();
-        System.out.println("catTipoDoc.getCodigo() : ["+catTipoDoc.getCodigo()+"]");
+        log.debug("catTipoDoc.getCodigo() : [{}] ", catTipoDoc.getCodigo());
     }
     
     @Override
