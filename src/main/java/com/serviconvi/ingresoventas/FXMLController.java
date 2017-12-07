@@ -25,7 +25,7 @@ public class FXMLController implements Initializable {
     @FXML
     private Label label;
     @FXML
-    private TextField tfFecha, tfSerie, tfDe, tfAl;
+    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente;
     @FXML
     private ComboBox cbTipoDoc;
     static Logger log = LogManager.getLogger(FXMLController.class);
@@ -78,6 +78,27 @@ public class FXMLController implements Initializable {
                 }
             });
 
+            tfCodCliente.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue){
+                    if (!newValue.matches("\\d*")) {
+                        tfCodCliente.setText(newValue.replaceAll("[^\\d-]", ""));
+                    }else{
+                        log.debug("tfCodCliente : [{}]", tfCodCliente.getText());
+                    }
+                }
+            });
+            
+            tfCodCliente.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+                {
+                    if(!newPropertyValue){
+                        log.info("Buscando cliente : [{}] ", tfCodCliente.getText());
+                    }
+                }
+            });
             CatTipoDocumentoDAO catTipoDocDAO = new CatTipoDocumentoDAO();
             List<CatTipoDocumento> tipoDeDocumentos = catTipoDocDAO.obtenerTipoDocumento();
             cbTipoDoc.setItems(FXCollections.observableArrayList(tipoDeDocumentos));
