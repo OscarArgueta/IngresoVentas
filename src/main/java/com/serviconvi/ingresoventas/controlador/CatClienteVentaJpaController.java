@@ -9,14 +9,17 @@ import com.serviconvi.ingresoventas.controlador.exceptions.NonexistentEntityExce
 import com.serviconvi.ingresoventas.controlador.exceptions.PreexistingEntityException;
 import com.serviconvi.scentidades.CatClienteVenta;
 import com.serviconvi.scentidades.CatClienteVentaPK;
+import com.serviconvi.util.MyLogger;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -24,6 +27,8 @@ import javax.persistence.criteria.Root;
  */
 public class CatClienteVentaJpaController implements Serializable {
 
+    static Logger log = MyLogger.getLogger(CatClienteVentaJpaController.class);
+    
     public CatClienteVentaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -123,6 +128,21 @@ public class CatClienteVentaJpaController implements Serializable {
         }
     }
 
+    public CatClienteVenta findCatClienteVenta(Integer codigoCliente) {
+        EntityManager em = getEntityManager();
+        MyLogger.debug("codigoCliente", codigoCliente);
+        try {
+            Query qryClienteVenta = em.createNamedQuery("CatClienteVenta.findByCodCliente");
+            qryClienteVenta.setParameter("codCliente", codigoCliente);
+            return (CatClienteVenta)qryClienteVenta.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }catch (Exception e) {
+            log.error(("Ocurrio un problema en \"CatClienteVenta.findByCodCliente\".  "+ e.getMessage()));
+            return null;
+        }
+    }
+    
     public CatClienteVenta findCatClienteVenta(CatClienteVentaPK id) {
         EntityManager em = getEntityManager();
         try {
