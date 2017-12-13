@@ -19,7 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class CatClienteVentaJpaController implements Serializable {
 
-    static Logger log = MyLogger.getLogger(CatClienteVentaJpaController.class);
+    MyLogger log = new MyLogger(LogManager.getLogger(CatClienteVentaJpaController.class));
     
     public CatClienteVentaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -130,7 +130,7 @@ public class CatClienteVentaJpaController implements Serializable {
 
     public CatClienteVenta findCatClienteVenta(Integer codigoCliente) {
         EntityManager em = getEntityManager();
-        MyLogger.debug("codigoCliente", codigoCliente);
+        log.debug("codigoCliente", codigoCliente);
         try {
             Query qryClienteVenta = em.createNamedQuery("CatClienteVenta.findByCodCliente");
             qryClienteVenta.setParameter("codCliente", codigoCliente);
@@ -138,7 +138,7 @@ public class CatClienteVentaJpaController implements Serializable {
         }catch(NoResultException e){
             return null;
         }catch (Exception e) {
-            log.error(("Ocurrio un problema en \"CatClienteVenta.findByCodCliente\".  "+ e.getMessage()));
+            log.error("Ocurrio un problema en \"CatClienteVenta.findByCodCliente\".  ", e);
             return null;
         }
     }

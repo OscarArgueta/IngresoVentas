@@ -20,7 +20,6 @@ import javafx.scene.control.TextField;
 import com.serviconvi.scentidades.CatTipoDocumento;
 import com.serviconvi.util.MyLogger;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class FXMLController implements Initializable {
     
@@ -30,18 +29,18 @@ public class FXMLController implements Initializable {
     private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente;
     @FXML
     private ComboBox cbTipoDoc;
-    static Logger log = MyLogger.getLogger(FXMLController.class);
+    MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        log.info("You clicked me!");
+        log.info("You clicked me!", "");
         label.setText("Hello World!");
     }
     
     @FXML
     private void showSelection(ActionEvent event){
         CatTipoDocumento catTipoDoc = (CatTipoDocumento) cbTipoDoc.getValue();
-        log.debug("catTipoDoc.getCodigo() : [{}] ", catTipoDoc.getCodigo());
+        log.debug("catTipoDoc.getCodigo()", catTipoDoc.getCodigo());
     }
     
     @Override
@@ -87,7 +86,7 @@ public class FXMLController implements Initializable {
                     if (!newValue.matches("\\d*")) {
                         tfCodCliente.setText(newValue.replaceAll("[^\\d-]", ""));
                     }else{
-                        MyLogger.debug("tfCodCliente", tfCodCliente.getText());
+                        log.debug("tfCodCliente", tfCodCliente.getText());
                     }
                 }
             });
@@ -97,11 +96,11 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
                     if(!newPropertyValue){
-                        MyLogger.info("Buscando cliente", tfCodCliente.getText());
+                        log.info("Buscando cliente", tfCodCliente.getText());
                         CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
                         CatClienteVenta clienteVenta = catClienteDAO.encontrarPorCodigo(Integer.parseInt(tfCodCliente.getText()));
                         if (clienteVenta == null){
-                            MyLogger.info("No existe codigo", tfCodCliente.getText());
+                            log.info("No existe codigo", tfCodCliente.getText());
                         }
                     }
                 }

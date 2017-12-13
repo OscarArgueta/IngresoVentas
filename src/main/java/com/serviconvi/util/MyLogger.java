@@ -5,7 +5,6 @@
  */
 package com.serviconvi.util;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
@@ -14,20 +13,29 @@ import org.apache.logging.log4j.Logger;
  */
 public class MyLogger{
     
-    static Logger log;
+    Logger log;
+
+    public MyLogger(Logger logger) {
+        log = logger;
+    }
     
-    public static Logger getLogger(Class<?> clazz){
-        log = LogManager.getLogger(clazz);
+    public Logger getLogger(){
         return log;
     }
     
-    public static void info(String etiqueta, String valor){
+    public void info(String etiqueta, String valor){
        String cadena = String.format("%-30.30s : ",etiqueta) + "[{}]";
        log.info(cadena, valor);
     }
     
-    public static void debug(String etiqueta, Object valor){
+    public void debug(String etiqueta, Object valor){
        String cadena = String.format("%-30.30s : ",etiqueta) + "[{}]";
        log.debug(cadena, valor);
     }
+
+    public void error(String msg, Exception ex){
+       ex.printStackTrace();
+       log.error(msg + " " + ex.getMessage());
+    }
+
 }
