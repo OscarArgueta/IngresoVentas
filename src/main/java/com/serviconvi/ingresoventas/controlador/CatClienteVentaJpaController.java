@@ -143,6 +143,21 @@ public class CatClienteVentaJpaController implements Serializable {
         }
     }
     
+    public CatClienteVenta findCatClienteVenta(String nit) {
+        EntityManager em = getEntityManager();
+        log.debug("NIT", nit);
+        try {
+            Query qryClienteVenta = em.createNamedQuery("CatClienteVenta.findByNit");
+            qryClienteVenta.setParameter("nit", nit);
+            return (CatClienteVenta)qryClienteVenta.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }catch (Exception e) {
+            log.error("Ocurrio un problema en \"CatClienteVenta.findByNit\".  ", e);
+            return null;
+        }
+    }
+
     public CatClienteVenta findCatClienteVenta(CatClienteVentaPK id) {
         EntityManager em = getEntityManager();
         try {

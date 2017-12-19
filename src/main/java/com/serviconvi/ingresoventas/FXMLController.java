@@ -23,10 +23,12 @@ import org.apache.logging.log4j.LogManager;
 
 public class FXMLController implements Initializable {
     
+    boolean exiteCodCliente=true;
+    boolean exiteNitCliente=true;
     @FXML
     private Label label;
     @FXML
-    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente;
+    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfNIT;
     @FXML
     private ComboBox cbTipoDoc;
     MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
@@ -101,10 +103,41 @@ public class FXMLController implements Initializable {
                         CatClienteVenta clienteVenta = catClienteDAO.encontrarPorCodigo(Integer.parseInt(tfCodCliente.getText()));
                         if (clienteVenta == null){
                             log.info("No existe codigo", tfCodCliente.getText());
+                            exiteCodCliente=false;
                         }
                     }
                 }
             });
+
+            tfNIT.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue){
+                    if (!newValue.matches("\\d*")) {
+                        tfNIT.setText(newValue.replaceAll("[^\\d-]", ""));
+                    }else{
+                        log.debug("tfNIT", tfNIT.getText());
+                    }
+                }
+            });
+            
+            
+            tfNIT.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+                {
+                    if(!newPropertyValue){
+                        log.info("Buscando NIT", tfNIT.getText());
+                        CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
+                        CatClienteVenta clienteVenta = catClienteDAO.encontrarPorNit(tfNIT.getText());
+                        if (clienteVenta == null){
+                            log.info("No existe NIT", tfNIT.getText());
+                            exiteNitCliente=false;
+                        }
+                    }
+                }
+            });
+            
             CatTipoDocumentoDAO catTipoDocDAO = new CatTipoDocumentoDAO();
             List<CatTipoDocumento> tipoDeDocumentos = catTipoDocDAO.obtenerTipoDocumento();
             cbTipoDoc.setItems(FXCollections.observableArrayList(tipoDeDocumentos));

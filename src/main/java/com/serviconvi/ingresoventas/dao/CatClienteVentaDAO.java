@@ -26,4 +26,8 @@ public class CatClienteVentaDAO {
     public CatClienteVenta encontrarPorCodigo(Integer codigoCliente){
         return catClienteVentajpaCtrl.findCatClienteVenta(codigoCliente);
     }
+    
+    public CatClienteVenta encontrarPorNit(String nit){
+        return catClienteVentajpaCtrl.findCatClienteVenta(nit);
+    }
 }
