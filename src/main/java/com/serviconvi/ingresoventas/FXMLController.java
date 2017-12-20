@@ -19,16 +19,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import com.serviconvi.scentidades.CatTipoDocumento;
 import com.serviconvi.util.MyLogger;
+import java.util.Optional;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import org.apache.logging.log4j.LogManager;
 
 public class FXMLController implements Initializable {
     
     boolean exiteCodCliente=true;
     boolean exiteNitCliente=true;
+    Alert alerta = new Alert(AlertType.CONFIRMATION);
+            
     @FXML
     private Label label;
     @FXML
-    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfNIT;
+    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfNIT, tfNombreCliVta;
     @FXML
     private ComboBox cbTipoDoc;
     MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
@@ -133,6 +139,38 @@ public class FXMLController implements Initializable {
                         if (clienteVenta == null){
                             log.info("No existe NIT", tfNIT.getText());
                             exiteNitCliente=false;
+                        }
+                    }
+                }
+            });
+
+            tfNombreCliVta.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue){
+                    tfNombreCliVta.setText(newValue.toUpperCase());
+                }
+            });
+            
+            
+            tfNombreCliVta.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+                {
+                    if(!newPropertyValue){
+                        if (!exiteCodCliente || !exiteNitCliente){
+                            log.debug("¿Ingresar Cliente?", tfNombreCliVta.getText());
+                            alerta.setTitle("Confirmacion");
+                            String msgAlerta = "El codigo \""+tfCodCliente.getText()+"\" y el NIT \""+tfNIT.getText()+"\" no fueron encontrados";
+                            alerta.setHeaderText(msgAlerta);
+                            alerta.setContentText("¿Desea agregarlo?");
+                            
+                            Optional<ButtonType> decideIngresoCliVta = alerta.showAndWait();
+                            if (decideIngresoCliVta.get() == ButtonType.OK){
+                                log.info("Se debe agregar el NIT", tfNIT.getText());
+                            }else{
+                                log.info("Rechazo el ingreo del NIT", tfNIT.getText());
+                            }
                         }
                     }
                 }
