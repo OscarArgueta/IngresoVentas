@@ -3,6 +3,7 @@ package com.serviconvi.ingresoventas;
 import com.serviconvi.ingresoventas.dao.CatClienteVentaDAO;
 import com.serviconvi.ingresoventas.dao.CatTipoDocumentoDAO;
 import com.serviconvi.scentidades.CatClienteVenta;
+import com.serviconvi.scentidades.CatClienteVentaPK;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,9 @@ public class FXMLController implements Initializable {
     
     boolean exiteCodCliente=true;
     boolean exiteNitCliente=true;
-    Alert alerta = new Alert(AlertType.CONFIRMATION);
+    Alert alertaConfirm = new Alert(AlertType.CONFIRMATION);
+    Alert alertaInfo = new Alert(AlertType.INFORMATION);
+    Alert alertaError = new Alert(AlertType.ERROR);
             
     @FXML
     private Label label;
@@ -104,6 +107,7 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
                     if(!newPropertyValue){
+                        exiteCodCliente=true;
                         log.info("Buscando cliente", tfCodCliente.getText());
                         CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
                         CatClienteVenta clienteVenta = catClienteDAO.encontrarPorCodigo(Integer.parseInt(tfCodCliente.getText()));
@@ -133,6 +137,7 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
                     if(!newPropertyValue){
+                        exiteNitCliente=true;
                         log.info("Buscando NIT", tfNIT.getText());
                         CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
                         CatClienteVenta clienteVenta = catClienteDAO.encontrarPorNit(tfNIT.getText());
@@ -160,14 +165,30 @@ public class FXMLController implements Initializable {
                     if(!newPropertyValue){
                         if (!exiteCodCliente || !exiteNitCliente){
                             log.debug("¿Ingresar Cliente?", tfNombreCliVta.getText());
-                            alerta.setTitle("Confirmacion");
+                            alertaConfirm.setTitle("Confirmacion");
                             String msgAlerta = "El codigo \""+tfCodCliente.getText()+"\" y el NIT \""+tfNIT.getText()+"\" no fueron encontrados";
-                            alerta.setHeaderText(msgAlerta);
-                            alerta.setContentText("¿Desea agregarlo?");
+                            alertaConfirm.setHeaderText(msgAlerta);
+                            alertaConfirm.setContentText("¿Desea agregarlo?");
                             
-                            Optional<ButtonType> decideIngresoCliVta = alerta.showAndWait();
+                            Optional<ButtonType> decideIngresoCliVta = alertaConfirm.showAndWait();
                             if (decideIngresoCliVta.get() == ButtonType.OK){
                                 log.info("Se debe agregar el NIT", tfNIT.getText());
+                                CatClienteVentaPK catClienteVentaPK = new CatClienteVentaPK(0, tfNIT.getText());
+                                CatClienteVenta catClienteVenta = new CatClienteVenta(catClienteVentaPK, tfNombreCliVta.getText());
+                                CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
+                                if(catClienteDAO.agregarClienteVta(catClienteVenta)){
+                                    msgAlerta="Cliente con NIT \""+tfNIT.getText()+"\" ingresado correctamente.";
+                                    alertaInfo.setTitle("Informacion");
+                                    alertaInfo.setHeaderText(null);
+                                    alertaInfo.setContentText(msgAlerta);
+                                    alertaInfo.showAndWait();
+                                }else{
+                                    alertaError.setTitle("Error");
+                                    alertaError.setHeaderText(null);
+                                    alertaError.setContentText("No fue posible agregar el Cliente. ");
+                                    alertaError.showAndWait();
+                                }
+                                
                             }else{
                                 log.info("Rechazo el ingreo del NIT", tfNIT.getText());
                             }
