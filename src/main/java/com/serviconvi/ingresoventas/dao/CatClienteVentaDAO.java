@@ -5,7 +5,6 @@
  */
 package com.serviconvi.ingresoventas.dao;
 
-import com.serviconvi.ingresoventas.FXMLController;
 import com.serviconvi.ingresoventas.controlador.CatClienteVentaJpaController;
 import com.serviconvi.scentidades.CatClienteVenta;
 import com.serviconvi.util.MyLogger;

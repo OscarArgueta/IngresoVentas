@@ -106,7 +106,7 @@ public class FXMLController implements Initializable {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
-                    if(!newPropertyValue){
+                    if(!newPropertyValue && !tfCodCliente.getText().isEmpty()){
                         exiteCodCliente=true;
                         log.info("Buscando cliente", tfCodCliente.getText());
                         CatClienteVentaDAO catClienteDAO = new CatClienteVentaDAO();
@@ -114,6 +114,10 @@ public class FXMLController implements Initializable {
                         if (clienteVenta == null){
                             log.info("No existe codigo", tfCodCliente.getText());
                             exiteCodCliente=false;
+                        }else{
+                            tfNIT.setText(clienteVenta.getCatClienteVentaPK().getNit());
+                            tfNombreCliVta.setText(clienteVenta.getNombreCliente());
+                            tfNombreCliVta.requestFocus();
                         }
                     }
                 }
@@ -144,6 +148,10 @@ public class FXMLController implements Initializable {
                         if (clienteVenta == null){
                             log.info("No existe NIT", tfNIT.getText());
                             exiteNitCliente=false;
+                        }else{
+                            tfCodCliente.setText(String.valueOf(clienteVenta.getCatClienteVentaPK().getCodCliente()));
+                            tfNombreCliVta.setText(clienteVenta.getNombreCliente());
+                            tfNombreCliVta.requestFocus();
                         }
                     }
                 }
