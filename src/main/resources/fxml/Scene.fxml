@@ -34,7 +34,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="116.0" prefHeight="113.0" prefWidth="587.0" text="CLIENTE">
+      <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="116.0" prefHeight="95.0" prefWidth="587.0" text="CLIENTE">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="46.0" prefWidth="585.0">
                <children>
@@ -46,6 +46,20 @@
                   <TextField fx:id="tfNombreCliVta" layoutX="185.0" layoutY="31.0" prefHeight="25.0" prefWidth="288.0" />
                </children>
             </AnchorPane>
+        </content>
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </TitledPane>
+      <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="210.0" prefHeight="95.0" prefWidth="587.0" text="VENTAS">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="46.0" prefWidth="585.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="7.0" text="Codigo" />
+                  <TextField layoutX="14.0" layoutY="22.0" prefHeight="25.0" prefWidth="48.0" />
+                  <TextField layoutX="74.0" layoutY="22.0" />
+                  <Label layoutX="74.0" layoutY="7.0" text="Descripcion" />
+               </children></AnchorPane>
         </content>
          <font>
             <Font name="System Bold" size="13.0" />
