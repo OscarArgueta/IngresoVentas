@@ -24,6 +24,7 @@ import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TitledPane;
 import org.apache.logging.log4j.LogManager;
 
 public class FXMLController implements Initializable {
@@ -33,7 +34,9 @@ public class FXMLController implements Initializable {
     Alert alertaConfirm = new Alert(AlertType.CONFIRMATION);
     Alert alertaInfo = new Alert(AlertType.INFORMATION);
     Alert alertaError = new Alert(AlertType.ERROR);
-            
+
+    @FXML
+    private TitledPane tpCliente;
     @FXML
     private Label label;
     @FXML
@@ -58,6 +61,7 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         try{
+            tpCliente.setDisable(true);
             tfFecha.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -86,6 +90,18 @@ public class FXMLController implements Initializable {
                                     String newValue){
                     if (!newValue.matches("\\d*")) {
                         tfDe.setText(newValue.replaceAll("[^\\d-]", ""));
+                    }
+                }
+            });
+
+            tfAl.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue){
+                    if (!newValue.isEmpty() || newValue == null ) {
+                        tpCliente.setDisable(false);
+                    }else{
+                        tpCliente.setDisable(true);
                     }
                 }
             });

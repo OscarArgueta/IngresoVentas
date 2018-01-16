@@ -34,7 +34,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="116.0" prefHeight="95.0" prefWidth="587.0" text="CLIENTE">
+      <TitledPane fx:id="tpCliente" animated="false" collapsible="false" layoutX="7.0" layoutY="116.0" prefHeight="95.0" prefWidth="587.0" text="CLIENTE">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="46.0" prefWidth="585.0">
                <children>
