@@ -36,11 +36,11 @@ public class FXMLController implements Initializable {
     Alert alertaError = new Alert(AlertType.ERROR);
 
     @FXML
-    private TitledPane tpCliente;
+    private TitledPane tpCliente, tpServicio;
     @FXML
     private Label label;
     @FXML
-    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfNIT, tfNombreCliVta;
+    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfCodServicio, tfNIT, tfNombreCliVta;
     @FXML
     private ComboBox cbTipoDoc;
     MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
@@ -55,6 +55,11 @@ public class FXMLController implements Initializable {
     private void showSelection(ActionEvent event){
         CatTipoDocumento catTipoDoc = (CatTipoDocumento) cbTipoDoc.getValue();
         log.debug("catTipoDoc.getCodigo()", catTipoDoc.getCodigo());
+        if (!tpCliente.isDisable()){
+            tfCodCliente.requestFocus();
+        }else{
+            tfCodServicio.requestFocus();
+        }
     }
     
     @Override
@@ -62,6 +67,7 @@ public class FXMLController implements Initializable {
         // TODO
         try{
             tpCliente.setDisable(true);
+            tpServicio.setDisable(true);
             tfFecha.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, 
@@ -100,8 +106,34 @@ public class FXMLController implements Initializable {
                                     String newValue){
                     if (!newValue.isEmpty() || newValue == null ) {
                         tpCliente.setDisable(false);
+                        tpServicio.setDisable(true);
                     }else{
                         tpCliente.setDisable(true);
+                        tpServicio.setDisable(false);
+                        tfCodCliente.clear();
+                        tfNIT.clear();
+                        tfNombreCliVta.clear();
+                    }
+                }
+            });
+
+            tfAl.focusedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+                                    Boolean newPropertyValue){
+                    if (oldPropertyValue){
+                        if (tfAl.getText() == null || tfAl.getText().isEmpty()) {
+                            log.debug("1 tfAl.getText() : ", tfAl.getText());
+                            tpCliente.setDisable(false);
+                            tpServicio.setDisable(true);
+                        }else{
+                            log.debug("2 tfAl.getText() : ", tfAl.getText());
+                            tpCliente.setDisable(true);
+                            tpServicio.setDisable(false);
+                            tfCodCliente.clear();
+                            tfNIT.clear();
+                            tfNombreCliVta.clear();
+                        }
                     }
                 }
             });
