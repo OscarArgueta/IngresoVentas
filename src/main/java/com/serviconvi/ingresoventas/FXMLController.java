@@ -122,7 +122,7 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
                                     Boolean newPropertyValue){
                     if (oldPropertyValue){
-                        if (tfAl.getText() == null || tfAl.getText().isEmpty()) {
+                        if (tfAl.getText() == null || tfAl.getText().isEmpty() || "1".equals(tfAl.getText())) {
                             log.debug("1 tfAl.getText() : ", tfAl.getText());
                             tpCliente.setDisable(false);
                             tpServicio.setDisable(true);
@@ -142,6 +142,10 @@ public class FXMLController implements Initializable {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue,
                                     String newValue){
+                    if (newValue.isEmpty()){
+                        tfNIT.clear();                        
+                        tfNombreCliVta.clear();                        
+                    }
                     if (!newValue.matches("\\d*")) {
                         tfCodCliente.setText(newValue.replaceAll("[^\\d-]", ""));
                     }else{
@@ -219,7 +223,7 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
                     if(!newPropertyValue){
-                        if (!exiteCodCliente || !exiteNitCliente){
+                        if (!exiteCodCliente && !exiteNitCliente){
                             log.debug("¿Ingresar Cliente?", tfNombreCliVta.getText());
                             alertaConfirm.setTitle("Confirmacion");
                             String msgAlerta = "El codigo \""+tfCodCliente.getText()+"\" y el NIT \""+tfNIT.getText()+"\" no fueron encontrados";
