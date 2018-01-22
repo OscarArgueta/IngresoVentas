@@ -2,6 +2,7 @@ package com.serviconvi.ingresoventas;
 
 import com.serviconvi.ingresoventas.dao.CatClienteVentaDAO;
 import com.serviconvi.ingresoventas.dao.CatTipoDocumentoDAO;
+import com.serviconvi.ingresoventas.dao.CatTipoVentaDAO;
 import com.serviconvi.scentidades.CatClienteVenta;
 import com.serviconvi.scentidades.CatClienteVentaPK;
 import java.net.URL;
@@ -19,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import com.serviconvi.scentidades.CatTipoDocumento;
+import com.serviconvi.scentidades.CatTipoVenta;
 import com.serviconvi.util.MyLogger;
 import java.util.Optional;
 import javafx.scene.control.Alert;
@@ -42,7 +44,7 @@ public class FXMLController implements Initializable {
     @FXML
     private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfCodServicio, tfNIT, tfNombreCliVta;
     @FXML
-    private ComboBox cbTipoDoc;
+    private ComboBox cbTipoDoc, cbTipoVenta;
     MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
     
     @FXML
@@ -256,11 +258,17 @@ public class FXMLController implements Initializable {
                     }
                 }
             });
-            
+            /* Incializa los Tipos de Documentos */
             CatTipoDocumentoDAO catTipoDocDAO = new CatTipoDocumentoDAO();
             List<CatTipoDocumento> tipoDeDocumentos = catTipoDocDAO.obtenerTipoDocumento();
             cbTipoDoc.setItems(FXCollections.observableArrayList(tipoDeDocumentos));
             catTipoDocDAO = null;
+            /* Incializa los Tipos de Ventas */
+            CatTipoVentaDAO catTipoVtaDAO = new CatTipoVentaDAO();
+            List<CatTipoVenta> tipoVentas = catTipoVtaDAO.obtenerTipoVenta();
+            cbTipoVenta.setItems(FXCollections.observableArrayList(tipoVentas));
+            catTipoVtaDAO = null;
+            
         }catch(Exception ex){
             ex.printStackTrace();
             System.err.println("ERROR : ["+ex.getMessage()+"]");

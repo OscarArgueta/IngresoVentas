@@ -28,7 +28,7 @@ CREATE TABLE `cat_cliente_venta` (
   `nombre_cliente` varchar(60) NOT NULL,
   `fecha_ingreso` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`cod_cliente`,`nit`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `cat_cliente_venta` (
 
 LOCK TABLES `cat_cliente_venta` WRITE;
 /*!40000 ALTER TABLE `cat_cliente_venta` DISABLE KEYS */;
+INSERT INTO `cat_cliente_venta` VALUES (1,'38122677','OSCAR ARGUETA','2018-01-22 16:38:09');
 /*!40000 ALTER TABLE `cat_cliente_venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -63,6 +64,31 @@ LOCK TABLES `cat_tipo_documento` WRITE;
 INSERT INTO `cat_tipo_documento` VALUES (1,'FACTURA'),(2,'FACTURA ESPECIAL'),(3,'NOTA DE CREDITO');
 /*!40000 ALTER TABLE `cat_tipo_documento` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `cat_tipo_venta`
+--
+
+DROP TABLE IF EXISTS `cat_tipo_venta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cat_tipo_venta` (
+  `codigo` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(50) NOT NULL,
+  `impuesto` decimal(4,2) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cat_tipo_venta`
+--
+
+LOCK TABLES `cat_tipo_venta` WRITE;
+/*!40000 ALTER TABLE `cat_tipo_venta` DISABLE KEYS */;
+INSERT INTO `cat_tipo_venta` VALUES (1,'MERCADERIAS',1.12),(2,'SERVICIOS',0.00),(3,'EXPORTACION',0.00);
+/*!40000 ALTER TABLE `cat_tipo_venta` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -73,4 +99,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-12 16:33:49
+-- Dump completed on 2018-01-22 12:41:46
