@@ -24,6 +24,8 @@ import com.serviconvi.scentidades.CatTipoVenta;
 import com.serviconvi.util.MyLogger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -38,6 +40,7 @@ public class FXMLController implements Initializable {
     Alert alertaConfirm = new Alert(AlertType.CONFIRMATION);
     Alert alertaInfo = new Alert(AlertType.INFORMATION);
     Alert alertaError = new Alert(AlertType.ERROR);
+    boolean perdioFocoAlerta = false;
 
     @FXML
     private TitledPane tpCliente, tpServicio;
@@ -228,17 +231,23 @@ public class FXMLController implements Initializable {
                     tfNombreCliVta.setText(newValue.toUpperCase());
                 }
             });
-            
+
             tfMontoBruto.focusedProperty().addListener(new ChangeListener<Boolean>(){
                 @Override
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
+                    if (perdioFocoAlerta){
+                        perdioFocoAlerta=false;
+                        return;
+                    }
                     if(!newPropertyValue){
                         if (!tfMontoBruto.getText().matches("(?=.)^ ?(([1-9][0-9]{0,2}(,[0-9]{3})*)|0)?(\\.[0-9]{1,2})?$")){
-                            log.info(" MontoBruto con mal formato. ", "");
-                            tfMontoBruto.setStyle("-fx-border-color: red ;");
+                            log.info(" MontoBruto sin comas. ", "");
+                            Double montoBrutoTmp = Double.parseDouble(tfMontoBruto.getText());
+                            tfMontoBruto.setText(NumberFormat.getNumberInstance(Locale.US).format(montoBrutoTmp));
+                            //tfMontoBruto.setStyle("-fx-border-color: red ;");
                         }else{
-                            tfMontoBruto.setStyle("");
+                            //tfMontoBruto.setStyle("");
                         }
                         BigDecimal temporal = new BigDecimal(tfMontoBruto.getText().replace(",", ""));
                         BigDecimal montoBruto = temporal.setScale(2,  RoundingMode.HALF_UP);
@@ -251,13 +260,22 @@ public class FXMLController implements Initializable {
                             log.debug("temporal", temporal);
                             BigDecimal montoNeto = temporal.setScale(2,  RoundingMode.HALF_UP);
                             log.debug("montoNeto", montoNeto);
-                            tfMontoNeto.setText(montoNeto.toString());
+                            tfMontoNeto.setText(NumberFormat.getNumberInstance(Locale.US).format(montoNeto));
                             temporal = montoNeto.multiply(catTipoVenta.getImpuesto());
                             BigDecimal impuesto = temporal.setScale(2, RoundingMode.HALF_UP);
-                            tfImpuesto.setText(impuesto.toString());
+                            tfImpuesto.setText(NumberFormat.getNumberInstance(Locale.US).format(impuesto));
                         }else{
                             tfMontoNeto.setText(tfMontoBruto.getText());
                             tfImpuesto.setText("0.00");
+                        }
+                    }else{
+                        if (catTipoVenta == null){
+                            perdioFocoAlerta = true;
+                            alertaInfo.setTitle("Informacion requerida");
+                            alertaInfo.setHeaderText(null);
+                            alertaInfo.setContentText("Por favor, seleccione \"TIPO DE VENTA\" antes de ingresar valores.");
+                            alertaInfo.showAndWait();
+                            cbTipoVenta.requestFocus();
                         }
                     }
                 }
