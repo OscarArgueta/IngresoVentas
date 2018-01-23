@@ -22,10 +22,14 @@ import javafx.scene.control.TextField;
 import com.serviconvi.scentidades.CatTipoDocumento;
 import com.serviconvi.scentidades.CatTipoVenta;
 import com.serviconvi.util.MyLogger;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
 import org.apache.logging.log4j.LogManager;
 
@@ -42,10 +46,12 @@ public class FXMLController implements Initializable {
     @FXML
     private Label label;
     @FXML
-    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfCodServicio, tfNIT, tfNombreCliVta;
+    private TextField tfFecha, tfSerie, tfDe, tfAl, tfCodCliente, tfCodServicio, tfNIT, tfNombreCliVta, tfMontoBruto, tfMontoNeto, tfImpuesto;
     @FXML
     private ComboBox cbTipoDoc, cbTipoVenta;
     MyLogger log = new MyLogger(LogManager.getLogger(FXMLController.class));
+    
+    CatTipoVenta catTipoVenta;
     
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -62,6 +68,12 @@ public class FXMLController implements Initializable {
         }else{
             tfCodServicio.requestFocus();
         }
+    }
+    
+    @FXML
+    private void seleccionTipoVenta(ActionEvent event){
+        catTipoVenta = (CatTipoVenta) cbTipoVenta.getValue();
+        log.debug(" El impuesto es", catTipoVenta.getImpuesto());
     }
     
     @Override
@@ -219,6 +231,28 @@ public class FXMLController implements Initializable {
                 }
             });
             
+            tfMontoBruto.focusedProperty().addListener(new ChangeListener<Boolean>(){
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+                {
+                    if(!newPropertyValue){
+                        //tfMontoBruto.getText()
+                        BigDecimal montoBruto = new BigDecimal(tfMontoBruto.getText());
+                        BigDecimal redondeado = montoBruto.setScale(2,  RoundingMode.HALF_UP);
+                        
+                        if (catTipoVenta.getImpuesto().signum() > 0 ){
+                            BigDecimal montoNeto = redondeado.divide(catTipoVenta.getImpuesto().add(new BigDecimal("1")));
+                            log.trace("montoNeto", montoNeto);
+                            redondeado = montoNeto.setScale(2,  RoundingMode.HALF_UP);
+                            log.trace("redondeado", redondeado);
+                            tfMontoNeto.setText(redondeado.toString());
+                            BigDecimal impuesto = montoNeto.multiply(catTipoVenta.getImpuesto());
+                            redondeado = impuesto.setScale(2, RoundingMode.HALF_UP);
+                            tfImpuesto.setText(redondeado.toString());
+                        }
+                    }
+                }
+            });
             
             tfNombreCliVta.focusedProperty().addListener(new ChangeListener<Boolean>(){
                 @Override
@@ -268,7 +302,7 @@ public class FXMLController implements Initializable {
             List<CatTipoVenta> tipoVentas = catTipoVtaDAO.obtenerTipoVenta();
             cbTipoVenta.setItems(FXCollections.observableArrayList(tipoVentas));
             catTipoVtaDAO = null;
-            
+
         }catch(Exception ex){
             ex.printStackTrace();
             System.err.println("ERROR : ["+ex.getMessage()+"]");
