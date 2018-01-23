@@ -25,11 +25,9 @@ import com.serviconvi.util.MyLogger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
 import org.apache.logging.log4j.LogManager;
 
@@ -73,7 +71,7 @@ public class FXMLController implements Initializable {
     @FXML
     private void seleccionTipoVenta(ActionEvent event){
         catTipoVenta = (CatTipoVenta) cbTipoVenta.getValue();
-        log.debug(" El impuesto es", catTipoVenta.getImpuesto());
+        log.debug("El impuesto es", catTipoVenta.getImpuesto());
     }
     
     @Override
@@ -236,19 +234,30 @@ public class FXMLController implements Initializable {
                 public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
                 {
                     if(!newPropertyValue){
-                        //tfMontoBruto.getText()
-                        BigDecimal montoBruto = new BigDecimal(tfMontoBruto.getText());
-                        BigDecimal redondeado = montoBruto.setScale(2,  RoundingMode.HALF_UP);
+                        if (!tfMontoBruto.getText().matches("(?=.)^ ?(([1-9][0-9]{0,2}(,[0-9]{3})*)|0)?(\\.[0-9]{1,2})?$")){
+                            log.info(" MontoBruto con mal formato. ", "");
+                            tfMontoBruto.setStyle("-fx-border-color: red ;");
+                        }else{
+                            tfMontoBruto.setStyle("");
+                        }
+                        BigDecimal temporal = new BigDecimal(tfMontoBruto.getText().replace(",", ""));
+                        BigDecimal montoBruto = temporal.setScale(2,  RoundingMode.HALF_UP);
                         
                         if (catTipoVenta.getImpuesto().signum() > 0 ){
-                            BigDecimal montoNeto = redondeado.divide(catTipoVenta.getImpuesto().add(new BigDecimal("1")));
-                            log.trace("montoNeto", montoNeto);
-                            redondeado = montoNeto.setScale(2,  RoundingMode.HALF_UP);
-                            log.trace("redondeado", redondeado);
-                            tfMontoNeto.setText(redondeado.toString());
-                            BigDecimal impuesto = montoNeto.multiply(catTipoVenta.getImpuesto());
-                            redondeado = impuesto.setScale(2, RoundingMode.HALF_UP);
-                            tfImpuesto.setText(redondeado.toString());
+                            BigDecimal iva = catTipoVenta.getImpuesto().setScale(2, RoundingMode.HALF_UP);
+                            log.debug("iva",iva);
+                            log.debug("montoBruto", montoBruto);
+                            temporal = montoBruto.divide(iva.add(new BigDecimal("1")), 2, RoundingMode.HALF_UP);
+                            log.debug("temporal", temporal);
+                            BigDecimal montoNeto = temporal.setScale(2,  RoundingMode.HALF_UP);
+                            log.debug("montoNeto", montoNeto);
+                            tfMontoNeto.setText(montoNeto.toString());
+                            temporal = montoNeto.multiply(catTipoVenta.getImpuesto());
+                            BigDecimal impuesto = temporal.setScale(2, RoundingMode.HALF_UP);
+                            tfImpuesto.setText(impuesto.toString());
+                        }else{
+                            tfMontoNeto.setText(tfMontoBruto.getText());
+                            tfImpuesto.setText("0.00");
                         }
                     }
                 }
